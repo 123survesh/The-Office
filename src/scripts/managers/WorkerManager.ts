@@ -1,4 +1,4 @@
-export default class Assistant {
+export default class WorkerManager {
 	constructor() {
 
 	}

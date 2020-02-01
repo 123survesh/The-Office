@@ -1,5 +1,5 @@
 import Room from '../objects/room';
-export default class Boss {
+export default class RoomManager {
 	public rooms: Room;
 	constructor() {
 
