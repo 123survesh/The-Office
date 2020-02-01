@@ -5,9 +5,9 @@ const skillType = Object.freeze({
 })
 
 const dimensions = {
-    hud_bar : {width: window.innerWidth, height: 200},
-    office_space: {width: window.innerWidth, height: window.innerHeight - 400},
-    repair_men_bar: {width: window.innerWidth, height: 200}
+    hud_bar : {width: 1, height: 0.1},
+    office_space: {width: 1, height: .75},
+    repair_men_bar: {width: 1, height: 0.15}
 }
 
 export {skillType, dimensions};

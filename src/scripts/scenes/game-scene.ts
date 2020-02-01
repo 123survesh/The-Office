@@ -16,18 +16,20 @@ export class GameScene extends Phaser.Scene {
   }
 
   init(): void {
-    let width = window.constants.width
+    let dimensions = window.constants.DATA.dimensions;
+    let width = this.cameras.main.width, height = this.cameras.main.height;
+    // let width = window.screen.width, height = window.screen.height;
     this._containers["hud_bar"] = this.add.container(0, 0);
-    this._containers["hud_bar"].setSize(window.constants.DATA.dimensions.hud_bar.width, window.constants.DATA.dimensions.hud_bar.height);
+    this._containers["hud_bar"].setSize(dimensions["hud_bar"].width * width, dimensions["hud_bar"].height * height);
     this._containers["hud_bar"].setPosition(0, 0);
 
     this._containers["office_space"] = this.add.container(0, 0);
-    this._containers["office_space"].setSize(window.constants.DATA.dimensions.office_space.width, window.constants.DATA.dimensions.office_space.height);
-    this._containers["office_space"].setPosition(0, window.constants.DATA.dimensions.hud_bar.height);
+    this._containers["office_space"].setSize(dimensions.office_space.width * width, dimensions.office_space.height * height);
+    this._containers["office_space"].setPosition(0, this._containers["hud_bar"].height);
 
     this._containers["repair_men_bar"] = this.add.container(0, 0);
-    this._containers["repair_men_bar"].setSize(window.constants.DATA.dimensions.repair_men_bar.width, window.constants.DATA.dimensions.repair_men_bar.height);
-    this._containers["repair_men_bar"].setPosition(0, window.constants.DATA.dimensions.hud_bar.height + window.constants.DATA.dimensions.office_space.height);
+    this._containers["repair_men_bar"].setSize(dimensions.repair_men_bar.width * width, dimensions.repair_men_bar.height * height);
+    this._containers["repair_men_bar"].setPosition(0, this._containers["hud_bar"].height + this._containers["office_space"].height);
   }
 
   create(): void {
