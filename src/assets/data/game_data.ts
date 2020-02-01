@@ -23,6 +23,12 @@ const workTime = Object.freeze({
     "computer_repair": 10
 })
 
+const damageTime = Object.freeze({
+    "electrician" : 20,
+    "carpenter": 20,
+    "computer_repair": 20
+})
+
 const repairManLimit = 3;
 
-export {skillType, dimensions, priceList, repairManLimit, workTime};
+export {skillType, dimensions, priceList, repairManLimit, workTime, damageTime};

@@ -1,3 +1,4 @@
+import {damageTime} from '../../assets/data/game_data';
 export default class Room extends Phaser.GameObjects.Image {
 
     public timeTillDeath: number;
@@ -10,18 +11,18 @@ export default class Room extends Phaser.GameObjects.Image {
         y: number
     };
 
-    private _damages = {
-        "electrician" : {
-            "time" : 10
-        }, 
-        "carpenter" : {
-            "time": 10
-        }, 
-        "computer_repair" : {
-            "time": 10
-        } 
+    // private _damages = {
+    //     "electrician" : {
+    //         "time" : 10
+    //     }, 
+    //     "carpenter" : {
+    //         "time": 10
+    //     }, 
+    //     "computer_repair" : {
+    //         "time": 10
+    //     } 
 
-    }
+    // }
 
     public open: boolean = true;
     public activeDamage: string = null;
@@ -45,7 +46,7 @@ export default class Room extends Phaser.GameObjects.Image {
 
     update(time, dt) {
         this.setPosition(this._position.x, this._position.y);
-        if(this.activeDamage) {
+        if(this.open && this.activeDamage) {
             this._timeToInactive -= (dt * 0.001);
             this._timerText.setText(this._timeToInactive+"");
             if(this._timeToInactive <= 0) {
@@ -68,10 +69,10 @@ export default class Room extends Phaser.GameObjects.Image {
 
     public startDamage(key: string) {
         if(this.open && !this.activeDamage) {
-            if(this._damages[key]) {
+            if(damageTime[key]) {
                 this.activeDamage = key;
                 this._damageText.setText(key);
-                this._timeToInactive = this._damages[key].time;
+                this._timeToInactive = damageTime[key].time;
             }
         }
     }
