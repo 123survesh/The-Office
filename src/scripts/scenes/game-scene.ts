@@ -50,9 +50,9 @@ export class GameScene extends Phaser.Scene {
   private _addCollisionDetection() {
     let keys = Object.keys(this._repairMenManager.repairMen);
     for(let i=0, length = keys.length; i < length; i++) {
-      this.physics.overlap(
-        this._roomManager.rooms,
+      this.physics.add.overlap(
         this._repairMenManager.repairMen[keys[i]],
+        this._roomManager.rooms,
         this._repairManHitRoom,
         null,
         this
@@ -73,10 +73,29 @@ export class GameScene extends Phaser.Scene {
       gameObject.y = dragY;
 
     });
+
+    // this.input.on('pointerup', function (pointer, currentlyOver) {
+
+    //   console.log(currentlyOver)
+
+    // });
+
+    // this.input.on('pointerdown', function (pointer, currentlyOver) {
+
+    //   gameObject.x = dragX;
+    //   gameObject.y = dragY;
+
+    // });
   }
 
   private _repairManHitRoom(repairMan : RepairMan, room: Room) {
-    repairMan.repair(room);
+    // console.log("Collision baby!!!");
+    repairMan.onRoom = true;
+    if(repairMan.checkOnRoom)
+    {
+      repairMan.checkOnRoom = false;
+      repairMan.repair(room);
+    }
   }
 
 }

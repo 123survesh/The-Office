@@ -2,7 +2,7 @@ import RepairMan from "../objects/repair_man";
 import {skillType, priceList, repairManLimit} from "../../assets/data/game_data";
 export default class RepairMenManager {
 	public repairMen: {
-		[key: string] : RepairMan[]
+		[key: string] : Phaser.GameObjects.Group
 	};
 	public money: number = 0;
 
@@ -25,6 +25,7 @@ export default class RepairMenManager {
 
 	private _splitContainer()
 	{
+		this._position = {};
 		let keys = Object.keys(skillType);
 		this._columns = keys.length;
 		let columns = this._columns, x = this._container.x, y = this._container.y;
@@ -38,25 +39,59 @@ export default class RepairMenManager {
 		}
 	}
 
+	private _createRepairManCallback(repairMan) {
+		// repairMan._position.set(this._position[repairMan.type].x, this._position[repairMan.type].y);
+		this._container.add(repairMan);
+	}
+
 	private _createRepairMen() {
+		this.repairMen = {};
 		let width = this._width * 0.8, height = this._height * 0.8;
 		let keys = Object.keys(skillType);
 		this._columns = keys.length;
 		for(let i=0, length = keys.length;i<length;i++) {
 			let key = keys[i];
-			this.repairMen[key] = [new RepairMan(this._scene, this._position[i].x, this._position[i].y, 'player', key)];
-			this._container.add(this.repairMen[key][0]);
+
+			this.repairMen[key] = this._scene.add.group({
+				classType: RepairMan,
+				maxSize: 3,
+				runChildUpdate: true,
+				createCallback: this._createRepairManCallback.bind(this),
+				defaultKey: "player"
+			});
+			let repairMan = new RepairMan(this._scene, this._position[key].x, this._position[key].y, "player", key);
+			// this._container.add(repairMan);
+			repairMan.addToContainer(this._container);
+			this.repairMen[key].add(repairMan);
+			// this.repairMen[key].add(new RepairMan(this._scene, this._position[key].x, this._position[key].y, "player", key));
+			// this.repairMen[key].createMultiple({
+			// 	classType: RepairMan,
+			// 	key: "player",
+			// 	quantity: 1,
+			// 	visible: true,
+			// 	active: true,
+			// 	setXY: {
+			// 		x: 0,
+			// 		y: 0
+			// 	}
+			// })
+
+			// this.repairMen[key] = [new RepairMan(this._scene, this._position[key].x, this._position[key].y, 'player', key)];
+			// this._container.add(this.repairMen[key][0]);
 		}
 	}
 
 	public buy(key) {
 		if(priceList[key]) {
 			if(priceList[key] <= this.money) {
-				let length = this.repairMen[key].length;
-				if(length < 3)
+				let length = this.repairMen[key].getTotalFree;
+				if(length)
 				{
-					this.repairMen[key].push(new RepairMan(this._scene, this._position[key].x, this._position[key].y, 'player', key));
-					this._container.add(this.repairMen[key][length]);
+					let repairMan = new RepairMan(this._scene, this._position[key].x, this._position[key].y, "player", key);
+					// this._container.add(repairMan);
+					repairMan.addToContainer(this._container);
+					this.repairMen[key].add(repairMan);
+					// this.repairMen[key].push(new RepairMan(this._scene, this._position[key].x, this._position[key].y, 'player', key));
 				}
 			}
 		}
