@@ -1,8 +1,8 @@
 import * as Phaser from "phaser";
-import { BootScene } from "./scenes/boot-scene";
-import { GameScene } from "./scenes/game-scene";
-import { HUDScene } from "./scenes/hud-scene";
-import { MenuScene } from "./scenes/menu-scene";
+import { BootScene } from "./scripts/scenes/boot-scene";
+import { GameScene } from "./scripts/scenes/game-scene";
+import { HUDScene } from "./scripts/scenes/hud-scene";
+import { MenuScene } from "./scripts/scenes/menu-scene";
 import * as GameData from "./assets/data/game_data";
 
 let parent = document.getElementById("game");
@@ -16,8 +16,15 @@ let ratio = window.innerHeight / window.innerWidth;
 window.constants = {};
 window.constants["HD_FLAG"] = (window.innerWidth > 300);
 window.constants["DATA"] = GameData;
-window.constants["HEIGHT"] = parent.offsetHeight;
-window.constants["WIDTH"] = parent.offsetHeight;
+// window.constants["RATIO"] = window.innerHeight / window.innerWidth;
+// window.constants["SOURCE_WIDTH"] = 1080;
+// window.constants["SOURCE_HEIGHT"] = 1920;
+// window.constants["BASE_WIDTH"] = 1079;
+// window.constants["BASE_HEIGHT"] = Math.floor(window.constants["SCREEN_WIDTH"] * window.constants["RATIO"]);
+// window.constants["DEAD_SPOT"] = { 
+//   x: Math.floor(window.constants["BASE_HEIGHT"] + Math.round(window.constants["BASE_HEIGHT"] * 0.5)), 
+//   y: Math.floor(window.constants["BASE_WIDTH"] + Math.round(window.constants["BASE_WIDTH"] * 0.5))
+// }
 
 const config: Phaser.Types.Core.GameConfig = {
   title: "The Office",
@@ -38,6 +45,11 @@ const config: Phaser.Types.Core.GameConfig = {
       debug: false
     }
   },
+  // scale: {
+  //   mode: Phaser.Scale.HEIGHT_CONTROLS_WIDTH,
+  //   height: window.constants.SCREEN_HEIGHT,
+  //   width: window.constants.BASE_WIDTH
+  // },
   backgroundColor: "#f5cc69",
   render: { pixelArt: true, antialias: false }
 };

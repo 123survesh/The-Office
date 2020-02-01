@@ -1,5 +1,5 @@
-import { skillType } from '../assets/data/game_data';
-export default class Worker extends Phaser.GameObjects.Image {
+import { skillType } from '../../assets/data/game_data';
+export default class RepairMan extends Phaser.GameObjects.Image {
 
     public skill: string;
     public time: number;

@@ -39,9 +39,7 @@ export class MenuScene extends Phaser.Scene {
   }
 
   update(): void {
-    if (true) {
-      this.changeScene();
-    }
+
   }
   
   private changeScene()
