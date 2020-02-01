@@ -1,0 +1,29 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    margin:0;
+    padding:0;
+}
+
+canvas {
+    display:block;
+    image-rendering: auto;
+}
+
+#fps{
+    color: white;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 5;
+    font-size: 41px;
+}
+
+#game{
+    height: 100%;
+    width: 100%;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
