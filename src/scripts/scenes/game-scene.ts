@@ -13,6 +13,7 @@ export class GameScene extends Phaser.Scene {
     super({
       key: "GameScene"
     });
+
   }
 
   init(): void {
@@ -38,6 +39,8 @@ export class GameScene extends Phaser.Scene {
     this._roomManager = new RoomManager(this, this._containers["office_space"]);
     this._repairMenManager = new RepairMenManager(this, this._containers["repair_men_bar"]);
 
+    this.DragRepairMen();
+
   }
 
   update(time, dt: number): void {
@@ -52,6 +55,33 @@ export class GameScene extends Phaser.Scene {
     //   this.scene.start("MenuScene");
     //   this.scene.stop("HUDScene");
     // }
+
+  }
+
+  private DragRepairMen() {
+
+
+    for (var i = 0; i < this._repairMenManager.repairMen.length; i++) {
+      var image = this._repairMenManager.repairMen[i].setInteractive();
+
+      this.input.setDraggable(image);
+    }
+
+    this.input.setDraggable(image);
+
+
+    this.input.on('dragstart', function (pointer, gameObject) {
+
+      this.children.bringToTop(gameObject);
+
+    }, this);
+
+    this.input.on('drag', function (pointer, gameObject, dragX, dragY) {
+
+      gameObject.x = dragX;
+      gameObject.y = dragY;
+
+    });
 
   }
 
