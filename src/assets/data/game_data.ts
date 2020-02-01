@@ -4,10 +4,25 @@ const skillType = Object.freeze({
     "computer_repair": 2
 })
 
+
 const dimensions = {
     hud_bar : {width: 1, height: 0.1},
     office_space: {width: 1, height: .75},
     repair_men_bar: {width: 1, height: 0.15}
 }
 
-export {skillType, dimensions};
+const priceList = Object.freeze({
+    "electrician" : 10,
+    "carpenter": 10,
+    "computer_repair": 10
+})
+
+const workTime = Object.freeze({
+    "electrician" : 10,
+    "carpenter": 10,
+    "computer_repair": 10
+})
+
+const repairManLimit = 3;
+
+export {skillType, dimensions, priceList, repairManLimit, workTime};

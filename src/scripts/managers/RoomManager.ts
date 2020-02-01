@@ -8,6 +8,7 @@ export default class RoomManager {
 	private _columns: number = 2;
 	private _height: number = 0;
 	private _width: number = 0;
+	
 	constructor(scene, container) {
 		this._scene = scene;
 		this._container = container;
