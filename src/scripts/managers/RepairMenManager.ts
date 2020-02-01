@@ -78,10 +78,13 @@ export default class RepairMenManager {
 			this.repairMen[key].tapRechargeTime = 5; 
 			this.repairMen[key].remainingRechargeTime = this.repairMen[key].tapRechargeTime = 5;
 			this.repairMen[key].recharging = false;
-			this.repairMen[key].rechargeText = this._scene.add.text(this._position[key].x, this._position[key].y - 10, "", {fontSize: 30, fontFamily: "sans"});
+			this.repairMen[key].rechargeText = this._scene.add.text(this._position[key].x, this._position[key].y - 80, "", {fontSize: 30, fontFamily: "sans"});
 			this.repairMen[key].rechargeText.setOrigin(0.5, 0.5);
-			this.repairMen[key].countText = this._scene.add.text(this._position[key].x, this._position[key].y - 10, "", {fontSize: 30, fontFamily: "sans"});
+			this.repairMen[key].countText = this._scene.add.text(this._position[key].x, this._position[key].y - 80, "", {fontSize: 30, fontFamily: "sans"});
 			this.repairMen[key].countText.setOrigin(0.5, 0.5);
+
+			this._container.add(this.repairMen[key].rechargeText);
+			this._container.add(this.repairMen[key].countText);
 		}
 
 	}
