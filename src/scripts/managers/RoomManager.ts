@@ -23,8 +23,8 @@ export default class RoomManager {
 		for(let i=0; i< rows;i++ ) {
 			for(let j=0;j<columns;j++) {
 				this._position[(i*(columns))+ j] = {
-					x: this._container.x + ((this._width * j) + (this._width / 2)),
-					y: this._container.y + ((this._height * i) + (this._height / 2))
+					x: ((this._width * j) + (this._width / 2)),
+					y: ((this._height * i) + (this._height / 2))
 				};
 			}
 		}

@@ -17,8 +17,8 @@ export class GameScene extends Phaser.Scene {
 
   init(): void {
     let dimensions = window.constants.DATA.dimensions;
-    let width = this.cameras.main.width, height = this.cameras.main.height;
-    // let width = window.screen.width, height = window.screen.height;
+    // let width = 1080, height = 1920;
+    let width = window.screen.width, height = window.screen.height;
     this._containers["hud_bar"] = this.add.container(0, 0);
     this._containers["hud_bar"].setSize(dimensions["hud_bar"].width * width, dimensions["hud_bar"].height * height);
     this._containers["hud_bar"].setPosition(0, 0);
@@ -30,6 +30,7 @@ export class GameScene extends Phaser.Scene {
     this._containers["repair_men_bar"] = this.add.container(0, 0);
     this._containers["repair_men_bar"].setSize(dimensions.repair_men_bar.width * width, dimensions.repair_men_bar.height * height);
     this._containers["repair_men_bar"].setPosition(0, this._containers["hud_bar"].height + this._containers["office_space"].height);
+    // this._containers["repair_men_bar"].setPosition(0,0);
   }
 
   create(): void {

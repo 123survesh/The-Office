@@ -22,8 +22,8 @@ export default class WorkerManager {
 		this._height = this._container.height;
 		for(let j=0;j<columns;j++) {
 			this._position[j] = {
-				x: this._container.x + ((this._width * j) + (this._width / 2)),
-				y: this._container.y + ((this._height / 2))
+				x: ((this._width * j) + (this._width / 2)),
+				y: ((this._height / 2))
 			};
 		}
 	}

@@ -29,8 +29,8 @@ window.constants["DATA"] = GameData;
 const config: Phaser.Types.Core.GameConfig = {
   title: "The Office",
   version: "0.0.1",
-  width: parent.offsetWidth,
-  height: parent.offsetHeight,
+  width: 1080,
+  height: 1920,
   zoom: 1,
   type: Phaser.AUTO,
   parent: "game",
@@ -45,11 +45,12 @@ const config: Phaser.Types.Core.GameConfig = {
       debug: false
     }
   },
-  // scale: {
-  //   mode: Phaser.Scale.HEIGHT_CONTROLS_WIDTH,
-  //   height: window.constants.SCREEN_HEIGHT,
-  //   width: window.constants.BASE_WIDTH
-  // },
+  scale: {
+    mode: Phaser.Scale.HEIGHT_CONTROLS_WIDTH,
+    // height: window.constants.SCREEN_HEIGHT,
+    // width: window.constants.BASE_WIDTH
+    autoCenter: Phaser.Scale.CENTER_BOTH
+  },
   backgroundColor: "#f5cc69",
   render: { pixelArt: true, antialias: false }
 };
