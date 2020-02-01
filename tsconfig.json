@@ -1,29 +1,30 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "outDir": "./lib/",
-        "target": "es5",
-        "sourceMap": true,
-        "allowJs": true,
-        "lib": [
-            "es2017",
-            "dom"
-        ],
-        "types": [
-            "phaser"
-        ],
-        "typeRoots": [
-            "node_modules/@types",
-            "node_modules/phaser/types",
-        ]
-    },
-    "include": [
-        "src/**/*.ts",
-        "node_modules/@types"
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "./lib/",
+    "target": "es5",
+    "sourceMap": true,
+    "allowJs": true,
+    "lib": [
+      "es2017",
+      "dom"
     ],
-    "exclude": [
-        ".git",
-        "node_modules"
+    "types":[
+      "phaser"
+    ],
+    "typeRoots": [
+      "node_modules/@types",
+      "node_modules/phaser/types",
     ]
+  },
+  "include": [
+      "src/**/*.ts",
+      "node_modules/@types",
+      "**/*.spec.ts"
+  ],
+  "exclude": [
+    ".git",
+    "node_modules"
+  ]
 }
