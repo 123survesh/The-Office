@@ -2,7 +2,16 @@ import RepairMan from "../objects/repair_man";
 import {skillType, priceList, repairManLimit} from "../../assets/data/game_data";
 export default class RepairMenManager {
 	public repairMen: {
-		[key: string] : Phaser.GameObjects.Group
+		[key: string] : { 
+			men?: Phaser.GameObjects.Group, 
+			tapsRemaining?: number, 
+			totalTaps?: number, 
+			tapRechargeTime?: number, 
+			remainingRechargeTime?: number, 
+			recharging?: boolean,
+			countText?: Phaser.GameObjects.Text,
+			rechargeText?: Phaser.GameObjects.Text
+		 }
 	};
 	public money: number = 0;
 
@@ -12,15 +21,18 @@ export default class RepairMenManager {
 	private _height: number = 0;
 	private _width: number = 0;
 	private _position: {};
+	private _pointerUpCallback: Function;
 
-	private _types = ["electric"]
+	private _types: Array<string>;
 
-	constructor(scene, container) {
+	constructor(scene, container, pointerUpCallback) {
 		this._scene = scene;
 		this._container = container;
-
+		this._pointerUpCallback = pointerUpCallback;
+		this._types = Object.keys(skillType);
 		this._splitContainer();
 		this._createRepairMen();
+		
 	}
 
 	private _splitContainer()
@@ -40,8 +52,7 @@ export default class RepairMenManager {
 	}
 
 	private _createRepairManCallback(repairMan) {
-		// repairMan._position.set(this._position[repairMan.type].x, this._position[repairMan.type].y);
-		this._container.add(repairMan);
+		repairMan.setProperties(this._container, this._pointerUpCallback, this.getTap.bind(this));
 	}
 
 	private _createRepairMen() {
@@ -51,8 +62,8 @@ export default class RepairMenManager {
 		this._columns = keys.length;
 		for(let i=0, length = keys.length;i<length;i++) {
 			let key = keys[i];
-
-			this.repairMen[key] = this._scene.add.group({
+			this.repairMen[key] = {};
+			this.repairMen[key].men = this._scene.add.group({
 				classType: RepairMan,
 				maxSize: 3,
 				runChildUpdate: true,
@@ -60,44 +71,71 @@ export default class RepairMenManager {
 				defaultKey: "player"
 			});
 			let repairMan = new RepairMan(this._scene, this._position[key].x, this._position[key].y, "player", key);
-			// this._container.add(repairMan);
-			repairMan.addToContainer(this._container);
-			this.repairMen[key].add(repairMan);
-			// this.repairMen[key].add(new RepairMan(this._scene, this._position[key].x, this._position[key].y, "player", key));
-			// this.repairMen[key].createMultiple({
-			// 	classType: RepairMan,
-			// 	key: "player",
-			// 	quantity: 1,
-			// 	visible: true,
-			// 	active: true,
-			// 	setXY: {
-			// 		x: 0,
-			// 		y: 0
-			// 	}
-			// })
-
-			// this.repairMen[key] = [new RepairMan(this._scene, this._position[key].x, this._position[key].y, 'player', key)];
-			// this._container.add(this.repairMen[key][0]);
+			repairMan.setProperties(this._container, this._pointerUpCallback, this.getTap.bind(this));
+			this.repairMen[key].men.add(repairMan);
+			this.repairMen[key].totalTaps = 5;
+			this.repairMen[key].tapsRemaining = this.repairMen[key].totalTaps;
+			this.repairMen[key].tapRechargeTime = 5; 
+			this.repairMen[key].remainingRechargeTime = this.repairMen[key].tapRechargeTime = 5;
+			this.repairMen[key].recharging = false;
+			this.repairMen[key].rechargeText = this._scene.add.text(this._position[key].x, this._position[key].y - 10, "", {fontSize: 30, fontFamily: "sans"});
+			this.repairMen[key].rechargeText.setOrigin(0.5, 0.5);
+			this.repairMen[key].countText = this._scene.add.text(this._position[key].x, this._position[key].y - 10, "", {fontSize: 30, fontFamily: "sans"});
+			this.repairMen[key].countText.setOrigin(0.5, 0.5);
 		}
+
 	}
 
 	public buy(key) {
 		if(priceList[key]) {
 			if(priceList[key] <= this.money) {
-				let length = this.repairMen[key].getTotalFree;
+				let length = this.repairMen[key].men.getTotalFree;
 				if(length)
 				{
 					let repairMan = new RepairMan(this._scene, this._position[key].x, this._position[key].y, "player", key);
-					// this._container.add(repairMan);
-					repairMan.addToContainer(this._container);
-					this.repairMen[key].add(repairMan);
-					// this.repairMen[key].push(new RepairMan(this._scene, this._position[key].x, this._position[key].y, 'player', key));
+					repairMan.setProperties(this._container, this._pointerUpCallback, this.getTap.bind(this));
+					this.repairMen[key].men.add(repairMan);
+					this.repairMen[key].men.add(repairMan);
+					this.repairMen[key].totalTaps += 10;
+					this.repairMen[key].tapsRemaining = this.repairMen[key].totalTaps;
+					this.repairMen[key].tapRechargeTime += 10; 
+					this.repairMen[key].remainingRechargeTime = this.repairMen[key].tapRechargeTime;
+					this.repairMen[key].recharging = false;
+					this.repairMen[key].countText.setText(this.repairMen[key].tapsRemaining + "");
 				}
 			}
 		}
 	}
 
+	public getTap(key)
+	{
+		if(!this.repairMen[key].recharging) {
+			this.repairMen[key].tapsRemaining--;
+			if(!this.repairMen[key].tapsRemaining) {
+				this.repairMen[key].recharging = true;
+				return -1;
+			}
+			return 1;
+		}
+		 
+	}
+
 	update(time, dt) {
-		
+		for(let i=0, length = this._types.length; i < length; i++) {
+			let repairMan = this.repairMen[this._types[i]];
+			if(repairMan.recharging) {
+				repairMan.remainingRechargeTime -= (dt * 0.001);
+				repairMan.rechargeText.setText(repairMan.remainingRechargeTime+ "");
+				repairMan.countText.setText("");
+				if(repairMan.remainingRechargeTime <= 0) {
+					repairMan.recharging = false;
+					repairMan.remainingRechargeTime = repairMan.tapRechargeTime;
+					repairMan.tapsRemaining = repairMan.totalTaps;
+				}
+			} else {
+				repairMan.rechargeText.setText("");
+				repairMan.countText.setText(repairMan.tapsRemaining+ "");
+			}
+		}
 	}
 }

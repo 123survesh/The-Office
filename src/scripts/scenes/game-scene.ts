@@ -37,9 +37,8 @@ export class GameScene extends Phaser.Scene {
   
   create(): void {
     this._roomManager = new RoomManager(this, this._containers["office_space"]);
-    this._repairMenManager = new RepairMenManager(this, this._containers["repair_men_bar"]);
+    this._repairMenManager = new RepairMenManager(this, this._containers["repair_men_bar"], this._pointerUpCallback.bind(this));
     this._addInputEvents();
-    this._addCollisionDetection();
   }
 
   update(time, dt: number): void {
@@ -47,11 +46,11 @@ export class GameScene extends Phaser.Scene {
     this._repairMenManager.update(time, dt);
   }
 
-  private _addCollisionDetection() {
+  private _pointerUpCallback(repairMan) {
     let keys = Object.keys(this._repairMenManager.repairMen);
     for(let i=0, length = keys.length; i < length; i++) {
-      this.physics.add.overlap(
-        this._repairMenManager.repairMen[keys[i]],
+      this.physics.overlap(
+        repairMan,
         this._roomManager.rooms,
         this._repairManHitRoom,
         null,
@@ -62,40 +61,25 @@ export class GameScene extends Phaser.Scene {
 
   private _addInputEvents() {
     this.input.on('dragstart', function (pointer, gameObject) {
-
-      this.children.bringToTop(gameObject);
+      if(!gameObject.onRoom) {
+        this.children.bringToTop(gameObject);
+      }
 
     }, this);
 
     this.input.on('drag', function (pointer, gameObject, dragX, dragY) {
-
-      gameObject.x = dragX;
-      gameObject.y = dragY;
+      if(!gameObject.onRoom) {
+        gameObject.x = dragX;
+        gameObject.y = dragY;
+      }
 
     });
-
-    // this.input.on('pointerup', function (pointer, currentlyOver) {
-
-    //   console.log(currentlyOver)
-
-    // });
-
-    // this.input.on('pointerdown', function (pointer, currentlyOver) {
-
-    //   gameObject.x = dragX;
-    //   gameObject.y = dragY;
-
-    // });
   }
 
   private _repairManHitRoom(repairMan : RepairMan, room: Room) {
     // console.log("Collision baby!!!");
     repairMan.onRoom = true;
-    if(repairMan.checkOnRoom)
-    {
-      repairMan.checkOnRoom = false;
-      repairMan.repair(room);
-    }
+    repairMan.repair(room);
   }
 
 }

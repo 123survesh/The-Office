@@ -14,9 +14,10 @@ export default class RepairMan extends Phaser.GameObjects.Image {
     }
     private _timerText: Phaser.GameObjects.Text;
     private _typeText: Phaser.GameObjects.Text;
-    public checkOnRoom: boolean = false;
     public onRoom: boolean = false;
     private _room: Room = null;
+    private _pointerUpCallback: Function;
+    private _getTap: Function;
 
     constructor(scene: Phaser.Scene, x: number, y: number, key: string, type: string) {
 
@@ -24,8 +25,6 @@ export default class RepairMan extends Phaser.GameObjects.Image {
         this.texture.getSourceImage();
         this.setOrigin(0.5, 0.5);
         this.type = type;
-        this.setInteractive();
-        this.scene.input.setDraggable(this);
         this._totalTime = workTime[type];
         this._homePosition = {
             x: x, y: y
@@ -36,24 +35,30 @@ export default class RepairMan extends Phaser.GameObjects.Image {
         this._typeText.setOrigin(0.5, 0.5);
         this._initPhysics();
         this._addInputEvents();
-
+        
     }
-
+    
     private _addInputEvents() {
+        this.setInteractive();
+        this.scene.input.setDraggable(this);
         this.addListener("pointerup", this._onPointerUp.bind(this));
         this.addListener("pointerdown", this._onPointerDown.bind(this));
     }
-
+    
     private _onPointerDown(pointer, currentlyOver) {
-        this.onRoom = false;
+        // this.onRoom = false;
     }
-
+    
     private _onPointerUp(pointer, currentlyOver) {
-        // this.checkcheckOnRoom = true;
-        this.checkOnRoom = true;
+        // this.onRoom will be set in the callback if there is a collision
+        this._pointerUpCallback(this);
         if (!this.onRoom) {
             this._packUp();
         }
+    }
+
+    private _droppedOnRoom(self, room) {
+        this.onRoom = true;
     }
 
     update(time, dt) {
@@ -75,11 +80,11 @@ export default class RepairMan extends Phaser.GameObjects.Image {
 
     private _packUp() {
         if(this._room) {
-            this._room.activeDamage = null;
+            // this._room.activeDamage = null;
+            this._room.fixComplete();
         }
         this._room = null;
         this.working = false;
-        this.checkOnRoom = false;
         this.onRoom = false;
 
         // this.scene.tweens.add({
@@ -99,7 +104,7 @@ export default class RepairMan extends Phaser.GameObjects.Image {
 
     public repair(room) {
         if (!this.working) {
-            let roomOpen = room.fix(this.type);
+            let roomOpen = room.fix(this);
             if (roomOpen) {
                 this.setPosition(room.x, room.y);
                 this.working = true;
@@ -112,10 +117,21 @@ export default class RepairMan extends Phaser.GameObjects.Image {
         }
     }
 
-    public addToContainer(container) {
+    public setProperties(container, callback, getTap) {
         container.add(this);
         container.add(this._typeText);
         container.add(this._timerText);
+        this._pointerUpCallback = callback;
+        this._getTap = getTap;
+    }
+
+    public tap() {
+        if(this._room) {
+            let tap = this._getTap(this.type);
+            if(tap) {
+                this._timeRemaining -= tap;
+            }
+        }
     }
 
 }
