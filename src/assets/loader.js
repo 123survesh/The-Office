@@ -11,6 +11,8 @@ import computer_repair from  './images/computer_repair.png';
 import room_electrician from './images/room_electrician.png';
 import room_carpenter from './images/room_carpenter.png';
 import room_computer_repair from  './images/room_computer_repair.png';
+import bgm from  './audio/bgm.mp3';
+
 
 export {
     
@@ -25,5 +27,6 @@ export {
     room_carpenter,
     room_computer_repair,
     font1_data,
-    font1_texture
+    font1_texture, 
+    bgm
 };
