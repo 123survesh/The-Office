@@ -10,6 +10,7 @@ export class BootScene extends Phaser.Scene {
   }
 
   preload(): void {
+
     // set the background and create loading bar
     this.cameras.main.setBackgroundColor(0x98d687);
     this.createLoadingbar();
@@ -95,6 +96,9 @@ export class BootScene extends Phaser.Scene {
         {
           type: "font", name: "font1"
         },
+        {
+          type: "audio", name:"bgm"
+        }
       ]
 
       this._loadAssets(assets);
@@ -105,6 +109,7 @@ export class BootScene extends Phaser.Scene {
   }
 
   private _loadAssets(assets) {
+
     for (let i = 0, length = assets.length; i < length; i++) {
       switch (assets[i].type) {
         case 'image':
@@ -118,6 +123,12 @@ export class BootScene extends Phaser.Scene {
             let texture_url = urls[assets[i].name + "_texture"];
             let data_url = urls[assets[i].name + "_data"];
             this.load.bitmapFont(assets[i].name, texture_url, data_url);
+            break;
+          }
+          case 'audio':
+          {
+            let url =urls[assets[i].name];
+            this.load.audio(assets[i].name, url);
             break;
           }
       }
