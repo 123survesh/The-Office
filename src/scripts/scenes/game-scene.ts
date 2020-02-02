@@ -42,6 +42,7 @@ export class GameScene extends Phaser.Scene {
   create(): void {
     this.bgm = this.sound.add("bgm");
     this.bgm.play();
+    this.bgm.loop = true;
     this.bgm.volume = 0.5;
     this._floor = this.add.image(0,0,"floor").setOrigin(0,0).setDepth(-10);
     this._boss = new Boss(this, 0, 0, "boss", this._containers["boss_bar"], this._containers["office_space"]);
