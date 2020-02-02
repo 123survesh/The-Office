@@ -18,6 +18,7 @@ export default class RepairMan extends Phaser.GameObjects.Image {
     private _room: Room = null;
     private _pointerUpCallback: Function;
     private _getTap: Function;
+    public getMoney: Function;
     private _container: Phaser.GameObjects.Container;
 
     constructor(scene: Phaser.Scene, x: number, y: number, key: string, type: string) {
@@ -155,13 +156,14 @@ export default class RepairMan extends Phaser.GameObjects.Image {
         }
     }
 
-    public setProperties(container, callback, getTap) {
+    public setProperties(container, callback, getTap, getMoney) {
         this._container = container;
         this._container.add(this);
         this._container.add(this._typeText);
         this._container.add(this._timerText);
         this._pointerUpCallback = callback;
         this._getTap = getTap;
+        this.getMoney = getMoney;
     }
 
     public tap() {
