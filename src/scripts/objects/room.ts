@@ -51,7 +51,7 @@ export default class Room extends Phaser.GameObjects.Image {
     }
 
     update(time, dt) {
-        this.setPosition(this._position.x, this._position.y);
+      //  this.setPosition(this._position.x, this._position.y);
         if(this.open && this.activeDamage) {
             this._timeToInactive -= (dt * 0.001);
             this._timerText.setText(Math.floor(this._timeToInactive)+"");
@@ -114,8 +114,38 @@ export default class Room extends Phaser.GameObjects.Image {
         this._position = {
             x: x, y: y
         }
-        this.setPosition(x, y);
+
+        // this.scene.tweens.add({
+        //     targets: [this],
+        //     x: x,
+        //     y: y,
+        //     ease: 'Linear',
+        //     duration: 5000,
+        //     yoyo: false,
+        //     repeat: 0,
+        //     callbackScope: this
+        // });
+
+      
+
         this._container = container;
         this._container.add(this);
+
+            (function(self){
+                setTimeout(() => { 
+                     self.scene.tweens.add({
+                        targets: [self],
+                        x: x,
+                        y: y,
+                        ease: 'Linear',
+                        duration: 750,
+                        yoyo: false,
+                        repeat: 0,
+                        callbackScope: self
+                    });
+            
+                }, 15)
+            })(this)
+
     }
 }
