@@ -14,7 +14,8 @@ import room_computer_repair from  './images/room_computer_repair.png';
 import icon_electrician from './images/icon_electrician.png';
 import icon_carpenter from './images/icon_carpenter.png';
 import icon_computer_repair from  './images/icon_computer_repair.png';
-
+import menu from './images/menu.jpg';
+import instruction from './images/instruction.jpg';
 
 export {
     
@@ -31,6 +32,9 @@ export {
     icon_electrician,
     icon_carpenter,
     icon_computer_repair,
+    menu,
+    instruction,
+
     font1_data,
     font1_texture
 };

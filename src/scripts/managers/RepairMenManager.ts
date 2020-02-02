@@ -29,7 +29,7 @@ export default class RepairMenManager {
 
 	private _types: Array<string>;
 
-	private _moneyText: Phaser.GameObjects.Text;
+	// private _moneyText: Phaser.GameObjects.Text;
 
 	constructor(scene, container, pointerUpCallback, hudContainer) {
 		this._scene = scene;
@@ -38,9 +38,9 @@ export default class RepairMenManager {
 		this._types = Object.keys(skillType);
 		this._splitContainer();
 		this._createRepairMen();
-		this._moneyText = this._scene.add.text(hudContainer.width - 100, hudContainer.height / 2, "Coins: 0", {fontSize: 30, fontFamily: "sans"});
-		this._moneyText.setOrigin(0.5, 0.5);
-		hudContainer.add(this._moneyText);
+		// this._moneyText = this._scene.add.text(hudContainer.width - 100, hudContainer.height / 2, "Coins: 0", {fontSize: 30, fontFamily: "sans"});
+		// this._moneyText.setOrigin(0.5, 0.5);
+		// hudContainer.add(this._moneyText);
 
 	}
 
@@ -165,6 +165,6 @@ export default class RepairMenManager {
 				// repairMan.countText.setText(repairMan.tapsRemaining+ "");
 			}
 		}
-		this._moneyText.setText("Coins: "+ this.money.toFixed(2));
+		// this._moneyText.setText("Coins: "+ this.money.toFixed(2));
 	}
 }

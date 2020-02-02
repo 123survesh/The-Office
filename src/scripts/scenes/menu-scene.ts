@@ -1,6 +1,8 @@
 export class MenuScene extends Phaser.Scene {
   private bitmapTexts: Phaser.GameObjects.BitmapText[] = [];
-
+  private _image1: Phaser.GameObjects.Image;
+  private _image2: Phaser.GameObjects.Image;
+  private _tapCount: number;
   constructor() {
     super({
       key: "MenuScene"
@@ -16,26 +18,31 @@ export class MenuScene extends Phaser.Scene {
   }
 
   create(): void {
-    let fontSize = (window.constants.HD_FLAG)? 22 : 10;
-    this.bitmapTexts.push(
-      this.add.bitmapText(
-        this.sys.canvas.width / 2 ,
-        this.sys.canvas.height / 2,
-        "font1",
-        "TAP To PLAY",
-        fontSize
-      )
-    );
+    this._tapCount = 0;
+    let image = this.textures.get("menu").getSourceImage();
+    this._image2 = this.add.image(image.width / 2, image.height / 2, "instruction");
+    this._image1 = this.add.image(image.width / 2, image.height / 2, "menu");
+    // let fontSize = (window.constants.HD_FLAG)? 22 : 10;
+    // this.bitmapTexts.push(
+    //   this.add.bitmapText(
+    //     this.sys.canvas.width / 2 ,
+    //     this.sys.canvas.height / 2,
+    //     "font1",
+    //     "TAP To PLAY",
+    //     fontSize
+    //   )
+    // );
 
-    this.bitmapTexts.push(
-      this.add.bitmapText(
-        this.sys.canvas.width / 2 - 60,
-        this.sys.canvas.height / 2 - 40,
-        "font1",
-        "THE OFFICE",
-        fontSize
-      )
-    );
+    // this.bitmapTexts.push(
+    //   this.add.bitmapText(
+    //     this.sys.canvas.width / 2 - 60,
+    //     this.sys.canvas.height / 2 - 40,
+    //     "font1",
+    //     "THE OFFICE",
+    //     fontSize
+    //   )
+    // );
+    // this.scene.add.image()
   }
 
   update(): void {
@@ -44,8 +51,14 @@ export class MenuScene extends Phaser.Scene {
   
   private changeScene()
   {
+    this._tapCount++;
+    if(this._tapCount > 1) {
+      this.scene.start("GameScene");
+    }
+    else {
+      this._image1.setAlpha(0);
+    }
     // this.scene.start("HUDScene");
-    this.scene.start("GameScene");
     // this.scene.bringToTop("HUDScene");
   }
 
