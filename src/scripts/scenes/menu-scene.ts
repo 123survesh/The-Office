@@ -44,9 +44,9 @@ export class MenuScene extends Phaser.Scene {
   
   private changeScene()
   {
-    this.scene.start("HUDScene");
+    // this.scene.start("HUDScene");
     this.scene.start("GameScene");
-    this.scene.bringToTop("HUDScene");
+    // this.scene.bringToTop("HUDScene");
   }
 
   /**

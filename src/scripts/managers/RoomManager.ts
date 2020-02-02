@@ -5,6 +5,7 @@ export default class RoomManager {
 	private _scene: Phaser.Scene;
 	private _container: Phaser.GameObjects.Container;
 	private _position: Array <any> = [];
+	public damageState: Array <number> = [];
 	private _rows: number = 3;
 	private _columns: number = 2;
 	private _height: number = 0;
@@ -16,9 +17,11 @@ export default class RoomManager {
 	constructor(scene, container) {
 		this._scene = scene;
 		this._container = container;
+		this.damageState = [];
 		this._splitContainer();
 		this._createRooms();
 		this._skills = Object.keys(skillType);
+
 	}
 
 	private _splitContainer()
@@ -37,13 +40,13 @@ export default class RoomManager {
 	}
 
 	private _createRoomCallback(room: Room) {
-		let index = this.rooms.getLength();
-		// this._container.add(room);
-		// room.setPosition(this._position[index - 1].x, this._position[index - 1].y);
-		// room.setPosition(100, 100);
-		// room.x = 100;
-		// room.y = 100;
-		room.setProperties(this._position[index - 1].x, this._position[index - 1].y, this._container);
+		let index = this.rooms.getLength() -1;
+		room.setProperties(this._position[index].x, this._position[index].y, this._container, this._setDamage.bind(this), index);
+		this.damageState[index] = 1;
+	}
+
+	private _setDamage(damage: number, index: number) {
+		this.damageState[index] = damage;
 	}
 
 	private _createRooms() {
@@ -65,12 +68,6 @@ export default class RoomManager {
 				y: 0
 			}
 		})
-
-		// let room_image = this._scene.textures.get('room').getSourceImage();
-		// for(let i=0,length = this._position.length;i<length;i++) {
-		// 	this.rooms[i] = new Room(this._scene, this._position[i].x, this._position[i].y, 'room');
-		// 	this._container.add(this.rooms[i]);
-		// }
 	}
 
 	update(time, dt) {

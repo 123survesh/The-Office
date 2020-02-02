@@ -9,6 +9,7 @@ export {
     
     player,
     room,
+    boss,
     font1_data,
     font1_texture
 };
