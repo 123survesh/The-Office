@@ -6,7 +6,7 @@ const skillType = Object.freeze({
 
 
 const dimensions = {
-    hud_bar : {width: 1, height: 0.1},
+    boss_bar : {width: 1, height: 0.1},
     office_space: {width: 1, height: .75},
     repair_men_bar: {width: 1, height: 0.15}
 }

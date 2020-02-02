@@ -54,23 +54,26 @@ export class BootScene extends Phaser.Scene {
           type: "image", name: "player"
         },
         {
+          type: "image", name: "boss"
+        },
+        {
           type: "font", name: "font1"
         },
       ]
 
-      this._loadAssets(assets, (window.innerWidth > 300));
+      this._loadAssets(assets);
   }
 
   update(): void {
     this.scene.start("MenuScene");
   }
 
-  private _loadAssets(assets, isHd) {
+  private _loadAssets(assets) {
     for (let i = 0, length = assets.length; i < length; i++) {
       switch (assets[i].type) {
         case 'image':
           {
-            let url = (isHd) ? urls[assets[i].name] : urls["sd_" + assets[i].name];
+            let url =urls[assets[i].name];
             this.load.image(assets[i].name, url);
             break;
           }

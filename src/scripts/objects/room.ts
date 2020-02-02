@@ -1,10 +1,15 @@
 import {damageTime} from '../../assets/data/game_data';
+import RepairMan from './repair_man';
 export default class Room extends Phaser.GameObjects.Image {
 
     public timeTillDeath: number;
 
     private _timerText: Phaser.GameObjects.Text;
     private _damageText: Phaser.GameObjects.Text;
+
+    private _repairMan: RepairMan;
+
+    public _container: Phaser.GameObjects.Container;
 
     private _position: {
         x: number, 
@@ -42,13 +47,14 @@ export default class Room extends Phaser.GameObjects.Image {
         this._timerText = this.scene.add.text(this.x, this.y, "", {fontSize: 30, fontFamily: "sans"});
         this._damageText = this.scene.add.text(this.x, this.y, "", {fontSize: 30, fontFamily: "sans"});
         this._initPhysics();
+        this._addInputEvents();
     }
 
     update(time, dt) {
         this.setPosition(this._position.x, this._position.y);
         if(this.open && this.activeDamage) {
             this._timeToInactive -= (dt * 0.001);
-            this._timerText.setText(this._timeToInactive+"");
+            this._timerText.setText(Math.floor(this._timeToInactive)+"");
             if(this._timeToInactive <= 0) {
                 this._kill();
             }
@@ -61,6 +67,15 @@ export default class Room extends Phaser.GameObjects.Image {
         this.scene.physics.world.enable(this);
     }
 
+    private _addInputEvents() {
+        this.setInteractive().on('pointerup', this._onPointerUp.bind(this));
+    }
+
+    private _onPointerUp(pointer, localX, localY, event) {
+        if(this._repairMan) {
+            this._repairMan.tap();
+        }
+    }
 
     private _kill() {
         this.open = false;
@@ -70,7 +85,6 @@ export default class Room extends Phaser.GameObjects.Image {
     public startDamage(key: string) {
         if(this.open && !this.activeDamage) {
             if(damageTime[key]) {
-                this.open = false;
                 this.activeDamage = key;
                 this._damageText.setText(key);
                 this._timeToInactive = damageTime[key];
@@ -78,18 +92,22 @@ export default class Room extends Phaser.GameObjects.Image {
         }
     }
 
-    public fix(key: string) {
+    public fix(repairman: RepairMan) {
         if(this.open) {
-            if(key == this.activeDamage) {
+            if(repairman.type == this.activeDamage) {
                 // do something
+                this._repairMan = repairman;
                 this.activeDamage = null;
                 this._timerText.setText("");
                 this._damageText.setText("");
-                this.open = true;
                 return true;
             } 
         }
         return false;
+    }
+
+    public fixComplete() {
+        this._repairMan = null;
     }
 
     public setProperties(x, y, container) {
@@ -97,6 +115,7 @@ export default class Room extends Phaser.GameObjects.Image {
             x: x, y: y
         }
         this.setPosition(x, y);
-        container.add(this);
+        this._container = container;
+        this._container.add(this);
     }
 }
