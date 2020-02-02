@@ -8,6 +8,8 @@ export default class Room extends Phaser.GameObjects.Image {
     private _damageText: Phaser.GameObjects.Text;
 
     private _repairMan: RepairMan;
+    
+    private _repairIcon : Phaser.GameObjects.Image;
 
     public _container: Phaser.GameObjects.Container;
 
@@ -43,6 +45,7 @@ export default class Room extends Phaser.GameObjects.Image {
         time: number,
         toFix: number
         fixed: number
+
     }
 
     constructor(scene: Phaser.Scene, x: number, y: number, key: string) {
@@ -51,6 +54,7 @@ export default class Room extends Phaser.GameObjects.Image {
         this.setOrigin(0.5, 0.5);
         this._timerText = this.scene.add.text(this.x, this.y, "", {fontSize: 30, fontFamily: "sans"});
         this._damageText = this.scene.add.text(this.x, this.y, "", {fontSize: 30, fontFamily: "sans"});
+        this._repairIcon = this.scene.add.image(this.x,this.y,null);
         this._initPhysics();
         this._addInputEvents();
     }
@@ -66,6 +70,7 @@ export default class Room extends Phaser.GameObjects.Image {
         }
         this._timerText.setPosition(this._position.x, this._position.y);
         this._damageText.setPosition(this._position.x, this._position.y + 20);
+        this._repairIcon.setPosition(this._position.x, this._position.y);
     }
     
     private _initPhysics(): void {
@@ -95,6 +100,9 @@ export default class Room extends Phaser.GameObjects.Image {
                 this._damageText.setText(key);
                 this._timeToInactive = damageTime[key];
                 this._updateDamageStatus(0, this._index);
+                this.setTexture("room_" + key)
+                this._repairIcon.setTexture("icon_" + key)
+            
             }
         }
     }
@@ -119,6 +127,7 @@ export default class Room extends Phaser.GameObjects.Image {
         this._repairMan.getMoney(money);
         this._repairMan = null;
         this._updateDamageStatus(1, this._index);
+        this.setTexture("room")
     }
 
     public setProperties(x, y, container, damageUpdateCallBack, index, payForJob) {
@@ -141,6 +150,8 @@ export default class Room extends Phaser.GameObjects.Image {
 
         this._container = container;
         this._container.add(this);
+
+
 
 
             (function(self){

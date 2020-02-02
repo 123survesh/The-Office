@@ -67,8 +67,8 @@ export default class RoomManager {
 			visible: true,
 			active: true,
 			setXY: {
-				x: 0,
-				y: 0
+				x: this._container.width/2,
+				y: this._container.height/2
 			}
 		})
 	}

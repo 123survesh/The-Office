@@ -1,10 +1,12 @@
 import RoomManager from "../managers/RoomManager";
 import {priceList, wave, skillType} from "../../assets/data/game_data";
+import InfoBar from "./inforbar";
 
 export default class Boss extends Phaser.GameObjects.Image {
     public mood: number = 100;
     private _roomManager: RoomManager;
     private _moodText: Phaser.GameObjects.Text;
+    private _moodBar: InfoBar;
 
     private _spawnTimeLapsed: number = 0;
     private _waveTimeLapsed: number = 0;
@@ -16,14 +18,18 @@ export default class Boss extends Phaser.GameObjects.Image {
         this.setScale(container_boss.height / this.height);
         this.setOrigin(0.5, 0.5);
         container_boss.add(this);
-        let x_ = ((this.width * this.scaleX) / 2) + this.x, y_ =  ((this.height * this.scaleY) /2 )+ this.y;
+        let x_ = ((this.width * this.scaleX) / 2) + this.x, y_ = ((this.height * this.scaleY) / 2) + this.y;
         this.setPosition(x_, y_);
         this._roomManager = new RoomManager(scene, container_rooms, this.pay.bind(this));
         this.mood = 100;
-        this._moodText = this.scene.add.text(2.5* x_, y_, "MOOD: "+this.mood, {fontSize: 30, fontFamily: "sans"} );
+
+        this._moodText = this.scene.add.text(2.5 * x_, y_ + 25, "MOOD: " + this.mood, { fontSize: 30, fontFamily: "sans" });
+        this._moodBar = new InfoBar(this.scene, this, this._roomManager.damageState.length);
+        container_boss.add(this._moodBar.rectangle);
+        this._moodBar.start();
         this._skills = Object.keys(skillType);
     }
-    
+
     update(time, dt) {
         let dt_ = dt * 0.001;
         this._spawnTimeLapsed += dt_;
@@ -44,7 +50,7 @@ export default class Boss extends Phaser.GameObjects.Image {
 
         this._roomManager.update(time, dt);
         this._calculateMood();
-        this._moodText.setText("MOOD: "+Math.floor(this.mood));
+        this._moodText.setText("MOOD: " + Math.floor(this.mood));
     }
 
     private _spawn() {
@@ -130,10 +136,11 @@ export default class Boss extends Phaser.GameObjects.Image {
 
     private _calculateMood() {
         let mood = 0, length = this._roomManager.damageState.length;
-        for(let i=0;i<length;i++) {
+        for (let i = 0; i < length; i++) {
             mood += this._roomManager.damageState[i];
         }
         this.mood = (100 / length) * mood;
+        this._moodBar.setValue(mood);
     }
 
     public pay(type: string) {

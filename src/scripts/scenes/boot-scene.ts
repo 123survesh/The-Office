@@ -57,6 +57,36 @@ export class BootScene extends Phaser.Scene {
           type: "image", name: "boss"
         },
         {
+          type: "image", name: "floor"
+        },
+        {
+          type: "image", name: "electrician"
+        },      
+        {
+          type: "image", name: "carpenter"
+        },      
+        {
+          type: "image", name: "computer_repair"
+        },      
+        {
+          type: "image", name: "room_carpenter"
+        },      
+        {
+          type: "image", name: "room_electrician"
+        },      
+        {
+          type: "image", name: "room_computer_repair"
+        },      
+        {
+          type: "image", name: "icon_computer_repair"
+        },  
+        {
+          type: "image", name: "icon_electrician"
+        },  
+        {
+          type: "image", name: "icon_carpenter"
+        },  
+        {
           type: "font", name: "font1"
         },
       ]
