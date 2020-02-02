@@ -83,6 +83,12 @@ export class BootScene extends Phaser.Scene {
         },  
         {
           type: "image", name: "icon_electrician"
+        }, 
+        {
+          type: "image", name: "menu"
+        }, 
+        {
+          type: "image", name: "instruction"
         },  
         {
           type: "image", name: "icon_carpenter"

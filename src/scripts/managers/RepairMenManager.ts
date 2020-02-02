@@ -10,10 +10,10 @@ export default class RepairMenManager {
 			tapRechargeTime?: number, 
 			remainingRechargeTime?: number, 
 			recharging?: boolean,
-			countText?: Phaser.GameObjects.Text,
-			rechargeText?: Phaser.GameObjects.Text
-			energyBar ?: InfoBar;
-			
+			// countText?: Phaser.GameObjects.Text,
+			// rechargeText?: Phaser.GameObjects.Text,
+			energyBar ?: InfoBar,
+			typeIcon?: Phaser.GameObjects.Image
 		 }
 	};
 	public money: number = 0;
@@ -29,7 +29,7 @@ export default class RepairMenManager {
 
 	private _types: Array<string>;
 
-	private _moneyText: Phaser.GameObjects.Text;
+	// private _moneyText: Phaser.GameObjects.Text;
 
 	constructor(scene, container, pointerUpCallback, hudContainer) {
 		this._scene = scene;
@@ -38,9 +38,9 @@ export default class RepairMenManager {
 		this._types = Object.keys(skillType);
 		this._splitContainer();
 		this._createRepairMen();
-		this._moneyText = this._scene.add.text(hudContainer.width - 100, hudContainer.height / 2, "Coins: 0", {fontSize: 30, fontFamily: "sans"});
-		this._moneyText.setOrigin(0.5, 0.5);
-		hudContainer.add(this._moneyText);
+		// this._moneyText = this._scene.add.text(hudContainer.width - 100, hudContainer.height / 2, "Coins: 0", {fontSize: 30, fontFamily: "sans"});
+		// this._moneyText.setOrigin(0.5, 0.5);
+		// hudContainer.add(this._moneyText);
 
 	}
 
@@ -89,15 +89,20 @@ export default class RepairMenManager {
 			this.repairMen[key].tapRechargeTime = 5; 
 			this.repairMen[key].remainingRechargeTime = this.repairMen[key].tapRechargeTime = 5;
 			this.repairMen[key].recharging = false;
-			this.repairMen[key].rechargeText = this._scene.add.text(this._position[key].x, this._position[key].y - 80, "", {fontSize: 30, fontFamily: "sans"});
-			this.repairMen[key].rechargeText.setOrigin(0.5, 0.5);
-			this.repairMen[key].energyBar = new InfoBar(this._scene,this.repairMen[key].rechargeText,this.repairMen[key].totalTaps);
+			// this.repairMen[key].rechargeText = this._scene.add.text(this._position[key].x, this._position[key].y - 80, "", {fontSize: 30, fontFamily: "sans"});
+			// this.repairMen[key].rechargeText.setOrigin(0.5, 0.5);
+			this.repairMen[key].energyBar = new InfoBar(this._scene,repairMan,this.repairMen[key].totalTaps, {x: 0, y: -130});
 			this.repairMen[key].energyBar.start();
-			this.repairMen[key].countText = this._scene.add.text(this._position[key].x, this._position[key].y - 80, "", {fontSize: 30, fontFamily: "sans"});
-			this.repairMen[key].countText.setOrigin(0.5, 0.5);
+
+			this.repairMen[key].typeIcon = this._scene.add.image(repairMan.x -(repairMan.width * 0.7) , repairMan.y - (repairMan.height * 0.6),"icon_"+key);
+			this.repairMen[key].typeIcon.setOrigin(0.5,0.5);
+			this.repairMen[key].typeIcon.setScale(0.75, 0.75);
+			// this.repairMen[key].countText = this._scene.add.text(this._position[key].x, this._position[key].y - 80, "", {fontSize: 30, fontFamily: "sans"});
+			// this.repairMen[key].countText.setOrigin(0.5, 0.5);
             this._container.add(this.repairMen[key].energyBar.rectangle);
-			this._container.add(this.repairMen[key].rechargeText);
-			this._container.add(this.repairMen[key].countText);
+			// this._container.add(this.repairMen[key].rechargeText);
+			this._container.add(this.repairMen[key].typeIcon);
+			// this._container.add(this.repairMen[key].countText);
 		}
 
 	}
@@ -121,7 +126,7 @@ export default class RepairMenManager {
 					this.repairMen[key].tapRechargeTime += 10; 
 					this.repairMen[key].remainingRechargeTime = this.repairMen[key].tapRechargeTime;
 					this.repairMen[key].recharging = false;
-					this.repairMen[key].countText.setText(this.repairMen[key].tapsRemaining + "");
+					// this.repairMen[key].countText.setText(this.repairMen[key].tapsRemaining + "");
 				}
 			}
 		}
@@ -147,8 +152,8 @@ export default class RepairMenManager {
 			if(repairMan.recharging) {				
 				repairMan.remainingRechargeTime -= (dt * 0.001);
 				repairMan.energyBar.setValue(repairMan.tapRechargeTime -repairMan.remainingRechargeTime);	
-				repairMan.rechargeText.setText("");
-				repairMan.countText.setText("");
+				// repairMan.rechargeText.setText("");
+				// repairMan.countText.setText("");
 				if(repairMan.remainingRechargeTime <= 0) {
 					repairMan.recharging = false;
 					repairMan.remainingRechargeTime = repairMan.tapRechargeTime;
@@ -156,10 +161,10 @@ export default class RepairMenManager {
 					repairMan.energyBar.setValue( repairMan.totalTaps);					
 				}
 			} else {
-				repairMan.rechargeText.setText("");
-				repairMan.countText.setText(repairMan.tapsRemaining+ "");
+				// repairMan.rechargeText.setText("");
+				// repairMan.countText.setText(repairMan.tapsRemaining+ "");
 			}
 		}
-		this._moneyText.setText("Coins: "+ this.money.toFixed(2));
+		// this._moneyText.setText("Coins: "+ this.money.toFixed(2));
 	}
 }

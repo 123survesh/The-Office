@@ -3,21 +3,28 @@ export default class InfoBar {
     public rectangle: Phaser.GameObjects.Rectangle;
     public static MAX_WIDTH: number;
     private _maxValue: number;
-    private _offsetX: number = 0;
+    private _offset: {x: number, y: number};
 
-    constructor(scene, parent, maxVal) {
-        let width = 150, height = 20;
+    constructor(scene, parent, maxVal, offset?: {x:number, y: number}, width?:number, height?:number) {
+        if(!offset) {
+            offset = {
+                x: parent.width * parent.scaleX * 1.15,
+                y: 0
+            }
+        }
+        this._offset = offset;
+        width = width ||150, height = height ||20;
         this._parent = parent;
         this._maxValue = maxVal;
         InfoBar.MAX_WIDTH = width;
         this.rectangle = scene.add.rectangle(0, 0, width, height, 0x00ff00, 1.0);
-        this._offsetX = parent.width * parent.scaleX * 1.15;
+        // this._offsetX = parent.width * parent.scaleX * 1.15;
      
         this._setPosition(this._parent.x, this._parent.y);
     }
 
     update(time, dt) {
-        this._setPosition(this._parent.x + this._offsetX, this._parent.y)
+        this._setPosition(this._parent.x, this._parent.y)
     }
 
     public setValue(value) {
@@ -34,8 +41,8 @@ export default class InfoBar {
 
     private _setPosition(x, y)
     {
-        this.rectangle.x = x + this._offsetX;
-        this.rectangle.y = y;
+        this.rectangle.x = x + this._offset.x;
+        this.rectangle.y = y + this._offset.y;
     }
 
 }

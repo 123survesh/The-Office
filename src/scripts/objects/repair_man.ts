@@ -13,7 +13,8 @@ export default class RepairMan extends Phaser.GameObjects.Image {
         x: number, y: number
     }
     private _timerText: Phaser.GameObjects.Text;
-    private _typeText: Phaser.GameObjects.Text;
+    // private _typeText: Phaser.GameObjects.Text;
+    // private _typeIcon : Phaser.GameObjects.Image;
     public onRoom: boolean = false;
     private _room: Room = null;
     private _pointerUpCallback: Function;
@@ -31,10 +32,13 @@ export default class RepairMan extends Phaser.GameObjects.Image {
         this._homePosition = {
             x: x, y: y
         };
-        this._timerText = this.scene.add.text(this.x, this.y, "", { fontSize: 30, fontFamily: "sans" });
+        this._timerText = this.scene.add.text(this.x, this.y + 200, "", { fontSize: 50, fontFamily: "sans", color: "#00ff00" });
         this._timerText.setOrigin(0.5, 0.5);
-        this._typeText = this.scene.add.text(this.x + 100, this.y + 100, type, { fontSize: 30, fontFamily: "sans" });
-        this._typeText.setOrigin(0.5, 0.5);
+        // this._typeText = this.scene.add.text(this.x + 100, this.y + 100, type, { fontSize: 30, fontFamily: "sans" });
+        // this._typeText.setOrigin(0.5, 0.5);
+        // this._typeIcon = this.scene.add.image(this.x -(this.width * 0.5) , this.y - (this.height * 0.5),"icon_"+key);
+        // this._typeIcon.setOrigin(0.5,0.5);
+        // this._typeIcon.setScale(0.75, 0.75);
         this._initPhysics();
         this._addInputEvents();
         
@@ -77,14 +81,15 @@ export default class RepairMan extends Phaser.GameObjects.Image {
     update(time, dt) {
         if (this.working) {
             this._timeRemaining -= (dt * 0.001);
-            this._timerText.setText(Math.floor(this._timeRemaining) + "");
+            this._timerText.setText(Math.floor((this._totalTime - this._timeRemaining)) + "");
             if (this._timeRemaining <= 0) {
                 this._timerText.setText("");
                 this._packUp();
             }
         }
-        this._timerText.setPosition(this.x, this.y);
-        this._typeText.setPosition(this.x, this.y + 50);
+        this._timerText.setPosition(this.x + 100, this.y);
+        // this._typeText.setPosition(this.x, this.y - (this.height * 0.7));
+        // this._typeIcon.setPosition(this.x -(this.width * 0.7) , this.y - (this.height * 0.5) );
     }
 
     private _initPhysics(): void {
@@ -97,12 +102,14 @@ export default class RepairMan extends Phaser.GameObjects.Image {
             // this._room.activeDamage = null;
             this._room.fixComplete();
             this._room._container.remove(this);
-            this._room._container.remove(this._typeText);
+            // this._room._container.remove(this._typeText);
             this._room._container.remove(this._timerText);
+            // this._room._container.remove(this._typeIcon);
 
             this._container.add(this);
-            this._container.add(this._typeText);
+            // this._container.add(this._typeText);
             this._container.add(this._timerText);
+            // this._container.add(this._typeIcon);
         }
         this._room = null;
         this.working = false;
@@ -139,11 +146,13 @@ export default class RepairMan extends Phaser.GameObjects.Image {
             let roomOpen = room.fix(this);
             if (roomOpen) {
                 this._container.remove(this);
-                this._container.remove(this._typeText);
+                // this._container.remove(this._typeText);
                 this._container.remove(this._timerText);
+                // this._container.remove(this._typeIcon);
                 room._container.add(this);
-                room._container.add(this._typeText);
+                // room._container.add(this._typeText);
                 room._container.add(this._timerText);
+                // room._container.add(this._typeIcon);
 
                 this.setPosition(room.x, room.y);
                 this.working = true;
@@ -159,8 +168,9 @@ export default class RepairMan extends Phaser.GameObjects.Image {
     public setProperties(container, callback, getTap, getMoney) {
         this._container = container;
         this._container.add(this);
-        this._container.add(this._typeText);
+        // this._container.add(this._typeText);
         this._container.add(this._timerText);
+        // this._container.add(this._typeIcon);
         this._pointerUpCallback = callback;
         this._getTap = getTap;
         this.getMoney = getMoney;

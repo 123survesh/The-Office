@@ -5,7 +5,7 @@ export default class Room extends Phaser.GameObjects.Image {
     public timeTillDeath: number;
 
     private _timerText: Phaser.GameObjects.Text;
-    private _damageText: Phaser.GameObjects.Text;
+    // private _damageText: Phaser.GameObjects.Text;
 
     private _repairMan: RepairMan;
     
@@ -52,9 +52,10 @@ export default class Room extends Phaser.GameObjects.Image {
         super(scene, x, y, key);
         
         this.setOrigin(0.5, 0.5);
-        this._timerText = this.scene.add.text(this.x, this.y, "", {fontSize: 30, fontFamily: "sans"});
-        this._damageText = this.scene.add.text(this.x, this.y, "", {fontSize: 30, fontFamily: "sans"});
+        this._timerText = this.scene.add.text(this.x, this.y - this.height /2, "", {fontSize: 50, fontFamily: "sans", color: "#ff0000", strokeThickness: 5, stroke: "#ff0000"});
+        // this._damageText = this.scene.add.text(this.x, this.y, "", {fontSize: 30, fontFamily: "sans"});
         this._repairIcon = this.scene.add.image(this.x,this.y,null);
+        this._repairIcon.setAlpha(0);
         this._initPhysics();
         this._addInputEvents();
     }
@@ -68,8 +69,8 @@ export default class Room extends Phaser.GameObjects.Image {
                 this._kill();
             }
         }
-        this._timerText.setPosition(this._position.x, this._position.y);
-        this._damageText.setPosition(this._position.x, this._position.y + 20);
+        this._timerText.setPosition(this._position.x + this.width * 0.2, this._position.y - this.height * 0.7);
+        // this._damageText.setPosition(this._position.x, this._position.y + 20);
         this._repairIcon.setPosition(this._position.x, this._position.y);
     }
     
@@ -97,12 +98,12 @@ export default class Room extends Phaser.GameObjects.Image {
         if(this.open && !damageType) {
             if(damageTime[key]) {
                 this.activeDamage = key;
-                this._damageText.setText(key);
+                // this._damageText.setText(key);
                 this._timeToInactive = damageTime[key];
                 this._updateDamageStatus(0, this._index);
                 this.setTexture("room_" + key)
-                this._repairIcon.setTexture("icon_" + key)
-            
+                this._repairIcon.setTexture("icon_" + key);
+                this._repairIcon.setAlpha(1);
             }
         }
     }
@@ -115,7 +116,16 @@ export default class Room extends Phaser.GameObjects.Image {
                 this._repairMan = repairman;
                 this.activeDamage = null;
                 this._timerText.setText("");
-                this._damageText.setText("");
+                // this._damageText.setText("");
+                this.scene.tweens.add({
+            targets: [this._repairIcon],
+           alpha : 0.5,
+            ease: 'Linear',
+            duration: 1000,
+            yoyo: true,
+            repeat: 10,
+            callbackScope: this
+        });
                 return true;
             } 
         }
@@ -127,7 +137,9 @@ export default class Room extends Phaser.GameObjects.Image {
         this._repairMan.getMoney(money);
         this._repairMan = null;
         this._updateDamageStatus(1, this._index);
-        this.setTexture("room")
+        this.setTexture("room");
+        this._repairIcon.setTexture(null);
+        this._repairIcon.setAlpha(0);
     }
 
     public setProperties(x, y, container, damageUpdateCallBack, index, payForJob) {
@@ -150,7 +162,7 @@ export default class Room extends Phaser.GameObjects.Image {
 
         this._container = container;
         this._container.add(this);
-
+        this._container.add(this._timerText);
 
 
 
