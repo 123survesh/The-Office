@@ -1,4 +1,5 @@
 import RoomManager from "../managers/RoomManager";
+import {priceList} from "../../assets/data/game_data";
 
 export default class Boss extends Phaser.GameObjects.Image {
     public mood: number = 100;
@@ -12,7 +13,7 @@ export default class Boss extends Phaser.GameObjects.Image {
         container_boss.add(this);
         let x_ = ((this.width * this.scaleX) / 2) + this.x, y_ =  ((this.height * this.scaleY) /2 )+ this.y;
         this.setPosition(x_, y_);
-        this._roomManager = new RoomManager(scene, container_rooms);
+        this._roomManager = new RoomManager(scene, container_rooms, this.pay.bind(this));
         this.mood = 100;
         this._moodText = this.scene.add.text(2.5* x_, y_, "MOOD: "+this.mood, {fontSize: 30, fontFamily: "sans"} );
     }
@@ -33,5 +34,9 @@ export default class Boss extends Phaser.GameObjects.Image {
             mood += this._roomManager.damageState[i];
         }
         this.mood = (100 / length) * mood;
+    }
+
+    public pay(type: string) {
+        return priceList[type] * (this.mood * .01);
     }
 }

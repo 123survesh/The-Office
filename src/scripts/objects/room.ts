@@ -19,6 +19,7 @@ export default class Room extends Phaser.GameObjects.Image {
     private _index: number;
 
     private _updateDamageStatus: Function;
+    private _payForJob: Function;
 
     // private _damages = {
     //     "electrician" : {
@@ -113,11 +114,13 @@ export default class Room extends Phaser.GameObjects.Image {
     }
 
     public fixComplete() {
+        let money = this._payForJob(this._repairMan.type);
+        this._repairMan.getMoney(money);
         this._repairMan = null;
         this._updateDamageStatus(1, this._index);
     }
 
-    public setProperties(x, y, container, damageUpdateCallBack, index) {
+    public setProperties(x, y, container, damageUpdateCallBack, index, payForJob) {
         this._position = {
             x: x, y: y
         }
@@ -126,5 +129,6 @@ export default class Room extends Phaser.GameObjects.Image {
         this._container.add(this);
         this._updateDamageStatus = damageUpdateCallBack;
         this._index = index;
+        this._payForJob = payForJob;
     }
 }

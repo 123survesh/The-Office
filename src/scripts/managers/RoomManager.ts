@@ -13,15 +13,16 @@ export default class RoomManager {
 	private _skills: Array<string>;
 
 	private _timeElapsed: number = 0;
+	private _payForJob: Function;
 	
-	constructor(scene, container) {
+	constructor(scene, container, payForJob) {
 		this._scene = scene;
 		this._container = container;
 		this.damageState = [];
+		this._skills = Object.keys(skillType);
+		this._payForJob = payForJob;
 		this._splitContainer();
 		this._createRooms();
-		this._skills = Object.keys(skillType);
-
 	}
 
 	private _splitContainer()
@@ -41,7 +42,7 @@ export default class RoomManager {
 
 	private _createRoomCallback(room: Room) {
 		let index = this.rooms.getLength() -1;
-		room.setProperties(this._position[index].x, this._position[index].y, this._container, this._setDamage.bind(this), index);
+		room.setProperties(this._position[index].x, this._position[index].y, this._container, this._setDamage.bind(this), index, this._payForJob);
 		this.damageState[index] = 1;
 	}
 

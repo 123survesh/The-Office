@@ -38,7 +38,7 @@ export class GameScene extends Phaser.Scene {
   
   create(): void {
     this._boss = new Boss(this, 0, 0, "boss", this._containers["boss_bar"], this._containers["office_space"]);
-    this._repairMenManager = new RepairMenManager(this, this._containers["repair_men_bar"], this._pointerUpCallback.bind(this));
+    this._repairMenManager = new RepairMenManager(this, this._containers["repair_men_bar"], this._pointerUpCallback.bind(this), this._containers["boss_bar"]);
     this._addInputEvents();
   }
 

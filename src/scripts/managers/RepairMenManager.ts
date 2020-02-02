@@ -25,14 +25,18 @@ export default class RepairMenManager {
 
 	private _types: Array<string>;
 
-	constructor(scene, container, pointerUpCallback) {
+	private _moneyText: Phaser.GameObjects.Text;
+
+	constructor(scene, container, pointerUpCallback, hudContainer) {
 		this._scene = scene;
 		this._container = container;
 		this._pointerUpCallback = pointerUpCallback;
 		this._types = Object.keys(skillType);
 		this._splitContainer();
 		this._createRepairMen();
-		
+		this._moneyText = this._scene.add.text(hudContainer.width - 100, hudContainer.height / 2, "Coins: 0", {fontSize: 30, fontFamily: "sans"});
+		this._moneyText.setOrigin(0.5, 0.5);
+		hudContainer.add(this._moneyText);
 	}
 
 	private _splitContainer()
@@ -52,7 +56,7 @@ export default class RepairMenManager {
 	}
 
 	private _createRepairManCallback(repairMan) {
-		repairMan.setProperties(this._container, this._pointerUpCallback, this.getTap.bind(this));
+		repairMan.setProperties(this._container, this._pointerUpCallback, this.getTap.bind(this), this.getMoney.bind(this));
 	}
 
 	private _createRepairMen() {
@@ -71,7 +75,7 @@ export default class RepairMenManager {
 				defaultKey: "player"
 			});
 			let repairMan = new RepairMan(this._scene, this._position[key].x, this._position[key].y, "player", key);
-			repairMan.setProperties(this._container, this._pointerUpCallback, this.getTap.bind(this));
+			repairMan.setProperties(this._container, this._pointerUpCallback, this.getTap.bind(this), this.getMoney.bind(this));
 			this.repairMen[key].men.add(repairMan);
 			this.repairMen[key].totalTaps = 5;
 			this.repairMen[key].tapsRemaining = this.repairMen[key].totalTaps;
@@ -89,6 +93,10 @@ export default class RepairMenManager {
 
 	}
 
+	public getMoney(money: number) {
+		this.money += (money || 0);
+	}
+
 	public buy(key) {
 		if(priceList[key]) {
 			if(priceList[key] <= this.money) {
@@ -96,7 +104,7 @@ export default class RepairMenManager {
 				if(length)
 				{
 					let repairMan = new RepairMan(this._scene, this._position[key].x, this._position[key].y, "player", key);
-					repairMan.setProperties(this._container, this._pointerUpCallback, this.getTap.bind(this));
+					repairMan.setProperties(this._container, this._pointerUpCallback, this.getTap.bind(this), this.getMoney.bind(this));
 					this.repairMen[key].men.add(repairMan);
 					this.repairMen[key].men.add(repairMan);
 					this.repairMen[key].totalTaps += 10;
@@ -140,5 +148,6 @@ export default class RepairMenManager {
 				repairMan.countText.setText(repairMan.tapsRemaining+ "");
 			}
 		}
+		this._moneyText.setText("Coins: "+ this.money.toFixed(2));
 	}
 }
