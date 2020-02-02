@@ -10,6 +10,7 @@ export class GameScene extends Phaser.Scene {
   private _roomManager: RoomManager;
   private _repairMenManager: RepairMenManager;
   private _boss : Boss;
+  private _floor:Phaser.GameObjects.Image;
 
   constructor() {
     super({
@@ -22,6 +23,7 @@ export class GameScene extends Phaser.Scene {
     let dimensions = window.constants.DATA.dimensions;
     // let width = 1080, height = 1920;
     let width = window.screen.width, height = window.screen.height;
+    
     this._containers["boss_bar"] = this.add.container(0, 0);
     this._containers["boss_bar"].setSize(dimensions["boss_bar"].width * width, dimensions["boss_bar"].height * height);
     this._containers["boss_bar"].setPosition(0, 0);
@@ -37,6 +39,7 @@ export class GameScene extends Phaser.Scene {
   }
   
   create(): void {
+    this._floor = this.add.image(0,0,"floor").setOrigin(0,0).setDepth(-10);
     this._boss = new Boss(this, 0, 0, "boss", this._containers["boss_bar"], this._containers["office_space"]);
     this._repairMenManager = new RepairMenManager(this, this._containers["repair_men_bar"], this._pointerUpCallback.bind(this));
     this._addInputEvents();

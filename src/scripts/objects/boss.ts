@@ -1,9 +1,10 @@
 import RoomManager from "../managers/RoomManager";
-
+import InfoBar from "./inforbar";
 export default class Boss extends Phaser.GameObjects.Image {
     public mood: number = 100;
     private _roomManager: RoomManager;
     private _moodText: Phaser.GameObjects.Text;
+    private _moodBar : InfoBar;
 
     constructor(scene: Phaser.Scene, x: number, y: number, key: string, container_boss, container_rooms) {
         super(scene, x, y, key);
@@ -14,7 +15,10 @@ export default class Boss extends Phaser.GameObjects.Image {
         this.setPosition(x_, y_);
         this._roomManager = new RoomManager(scene, container_rooms);
         this.mood = 100;
-        this._moodText = this.scene.add.text(2.5* x_, y_, "MOOD: "+this.mood, {fontSize: 30, fontFamily: "sans"} );
+        this._moodText = this.scene.add.text(2.5* x_, y_ + 25, "MOOD: "+this.mood, {fontSize: 30, fontFamily: "sans"} );
+        this._moodBar = new InfoBar(this.scene,this,this._roomManager.damageState.length);
+        container_boss.add( this._moodBar.rectangle);
+        this._moodBar.start();
     }
     
     update(time, dt) {
@@ -33,5 +37,6 @@ export default class Boss extends Phaser.GameObjects.Image {
             mood += this._roomManager.damageState[i];
         }
         this.mood = (100 / length) * mood;
+        this._moodBar.setValue(mood);
     }
 }

@@ -1,4 +1,5 @@
 import RepairMan from "../objects/repair_man";
+import InfoBar from "../objects/inforbar";
 import {skillType, priceList, repairManLimit} from "../../assets/data/game_data";
 export default class RepairMenManager {
 	public repairMen: {
@@ -11,6 +12,8 @@ export default class RepairMenManager {
 			recharging?: boolean,
 			countText?: Phaser.GameObjects.Text,
 			rechargeText?: Phaser.GameObjects.Text
+			energyBar ?: InfoBar;
+			
 		 }
 	};
 	public money: number = 0;
@@ -22,6 +25,7 @@ export default class RepairMenManager {
 	private _width: number = 0;
 	private _position: {};
 	private _pointerUpCallback: Function;
+	
 
 	private _types: Array<string>;
 
@@ -32,6 +36,7 @@ export default class RepairMenManager {
 		this._types = Object.keys(skillType);
 		this._splitContainer();
 		this._createRepairMen();
+	
 		
 	}
 
@@ -70,7 +75,7 @@ export default class RepairMenManager {
 				createCallback: this._createRepairManCallback.bind(this),
 				defaultKey: "player"
 			});
-			let repairMan = new RepairMan(this._scene, this._position[key].x, this._position[key].y, "player", key);
+			let repairMan = new RepairMan(this._scene, this._position[key].x, this._position[key].y,key, key);
 			repairMan.setProperties(this._container, this._pointerUpCallback, this.getTap.bind(this));
 			this.repairMen[key].men.add(repairMan);
 			this.repairMen[key].totalTaps = 5;
@@ -80,9 +85,11 @@ export default class RepairMenManager {
 			this.repairMen[key].recharging = false;
 			this.repairMen[key].rechargeText = this._scene.add.text(this._position[key].x, this._position[key].y - 80, "", {fontSize: 30, fontFamily: "sans"});
 			this.repairMen[key].rechargeText.setOrigin(0.5, 0.5);
+			this.repairMen[key].energyBar = new InfoBar(this._scene,this.repairMen[key].rechargeText,this.repairMen[key].totalTaps);
+			this.repairMen[key].energyBar.start();
 			this.repairMen[key].countText = this._scene.add.text(this._position[key].x, this._position[key].y - 80, "", {fontSize: 30, fontFamily: "sans"});
 			this.repairMen[key].countText.setOrigin(0.5, 0.5);
-
+            this._container.add(this.repairMen[key].energyBar.rectangle);
 			this._container.add(this.repairMen[key].rechargeText);
 			this._container.add(this.repairMen[key].countText);
 		}
@@ -114,6 +121,7 @@ export default class RepairMenManager {
 	{
 		if(!this.repairMen[key].recharging) {
 			this.repairMen[key].tapsRemaining--;
+			this.repairMen[key].energyBar.setValue(this.repairMen[key].tapsRemaining);
 			if(!this.repairMen[key].tapsRemaining) {
 				this.repairMen[key].recharging = true;
 				return -1;
@@ -126,14 +134,16 @@ export default class RepairMenManager {
 	update(time, dt) {
 		for(let i=0, length = this._types.length; i < length; i++) {
 			let repairMan = this.repairMen[this._types[i]];
-			if(repairMan.recharging) {
+			if(repairMan.recharging) {				
 				repairMan.remainingRechargeTime -= (dt * 0.001);
-				repairMan.rechargeText.setText(repairMan.remainingRechargeTime+ "");
+				repairMan.energyBar.setValue(repairMan.tapRechargeTime -repairMan.remainingRechargeTime);	
+				repairMan.rechargeText.setText("");
 				repairMan.countText.setText("");
 				if(repairMan.remainingRechargeTime <= 0) {
 					repairMan.recharging = false;
 					repairMan.remainingRechargeTime = repairMan.tapRechargeTime;
 					repairMan.tapsRemaining = repairMan.totalTaps;
+					repairMan.energyBar.setValue( repairMan.totalTaps);					
 				}
 			} else {
 				repairMan.rechargeText.setText("");
