@@ -9,6 +9,8 @@ export default class Room extends Phaser.GameObjects.Image {
 
     private _repairMan: RepairMan;
 
+    public _container: Phaser.GameObjects.Container;
+
     private _position: {
         x: number, 
         y: number
@@ -52,7 +54,7 @@ export default class Room extends Phaser.GameObjects.Image {
         this.setPosition(this._position.x, this._position.y);
         if(this.open && this.activeDamage) {
             this._timeToInactive -= (dt * 0.001);
-            this._timerText.setText(this._timeToInactive+"");
+            this._timerText.setText(Math.floor(this._timeToInactive)+"");
             if(this._timeToInactive <= 0) {
                 this._kill();
             }
@@ -113,6 +115,7 @@ export default class Room extends Phaser.GameObjects.Image {
             x: x, y: y
         }
         this.setPosition(x, y);
-        container.add(this);
+        this._container = container;
+        this._container.add(this);
     }
 }
