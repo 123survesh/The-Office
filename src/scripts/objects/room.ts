@@ -88,7 +88,8 @@ export default class Room extends Phaser.GameObjects.Image {
     }
 
     public startDamage(key: string) {
-        if(this.open && !this.activeDamage) {
+        let damageType = this.getDamageType();
+        if(this.open && !damageType) {
             if(damageTime[key]) {
                 this.activeDamage = key;
                 this._damageText.setText(key);
@@ -162,5 +163,15 @@ export default class Room extends Phaser.GameObjects.Image {
         this._updateDamageStatus = damageUpdateCallBack;
         this._index = index;
         this._payForJob = payForJob;
+    }
+
+    public getDamageType() {
+        if(this.activeDamage) {
+            return this.activeDamage;
+        }
+        else if(this._repairMan){
+            return this._repairMan.type;
+        }
+        return null;
     }
 }

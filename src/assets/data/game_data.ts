@@ -31,4 +31,12 @@ const damageTime = Object.freeze({
 
 const repairManLimit = 3;
 
-export {skillType, dimensions, priceList, repairManLimit, workTime, damageTime};
+const wave = [
+    {
+        spawn: 8,
+        tornado: 15,
+        limit: 50
+    }
+]
+
+export {skillType, dimensions, priceList, repairManLimit, workTime, damageTime, wave};
