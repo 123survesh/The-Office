@@ -46,6 +46,18 @@ export default class RepairMan extends Phaser.GameObjects.Image {
 
     private _onPointerDown(pointer, currentlyOver) {
         this.onRoom = false;
+
+        this.scene.tweens.add({
+            targets: [this],
+            scaleX: 1.5,
+            scaleY: 1.5,
+            ease: 'Linear',
+            duration: 100,
+            yoyo: false,
+            repeat: 0,
+            callbackScope: this
+        });
+
     }
 
     private _onPointerUp(pointer, currentlyOver) {
@@ -74,7 +86,7 @@ export default class RepairMan extends Phaser.GameObjects.Image {
     }
 
     private _packUp() {
-        if(this._room) {
+        if (this._room) {
             this._room.activeDamage = null;
         }
         this._room = null;
@@ -82,19 +94,30 @@ export default class RepairMan extends Phaser.GameObjects.Image {
         this.checkOnRoom = false;
         this.onRoom = false;
 
-        // this.scene.tweens.add({
-        //     targets: [this],
-        //     x: this._homePosition.x,
-        //     y: this._homePosition.y,
-        //     ease: 'Linear',
-        //     duration: 1000,
-        //     yoyo:false,
-        //     repeat: 0,
-        //     callbackScope: this
-        // });
+        this.scene.tweens.add({
+            targets: [this],
+            scaleX: 1,
+            scaleY: 1,
+            ease: 'Linear',
+            duration: 100,
+            yoyo: false,
+            repeat: 0,
+            callbackScope: this
+        });
+
+        this.scene.tweens.add({
+            targets: [this],
+            x: this._homePosition.x,
+            y: this._homePosition.y,
+            ease: 'Linear',
+            duration: 350,
+            yoyo: false,
+            repeat: 0,
+            callbackScope: this
+        });
 
 
-        this.setPosition(this._homePosition.x, this._homePosition.y);
+        //  this.setPosition(this._homePosition.x, this._homePosition.y);
     }
 
     public repair(room) {
