@@ -16,6 +16,10 @@ export default class Room extends Phaser.GameObjects.Image {
         y: number
     };
 
+    private _index: number;
+
+    private _updateDamageStatus: Function;
+
     // private _damages = {
     //     "electrician" : {
     //         "time" : 10
@@ -88,6 +92,7 @@ export default class Room extends Phaser.GameObjects.Image {
                 this.activeDamage = key;
                 this._damageText.setText(key);
                 this._timeToInactive = damageTime[key];
+                this._updateDamageStatus(0, this._index);
             }
         }
     }
@@ -96,6 +101,7 @@ export default class Room extends Phaser.GameObjects.Image {
         if(this.open) {
             if(repairman.type == this.activeDamage) {
                 // do something
+                this._updateDamageStatus(0.5, this._index);
                 this._repairMan = repairman;
                 this.activeDamage = null;
                 this._timerText.setText("");
@@ -108,9 +114,10 @@ export default class Room extends Phaser.GameObjects.Image {
 
     public fixComplete() {
         this._repairMan = null;
+        this._updateDamageStatus(1, this._index);
     }
 
-    public setProperties(x, y, container) {
+    public setProperties(x, y, container, damageUpdateCallBack, index) {
         this._position = {
             x: x, y: y
         }
@@ -131,6 +138,7 @@ export default class Room extends Phaser.GameObjects.Image {
         this._container = container;
         this._container.add(this);
 
+
             (function(self){
                 setTimeout(() => { 
                      self.scene.tweens.add({
@@ -146,6 +154,10 @@ export default class Room extends Phaser.GameObjects.Image {
             
                 }, 15)
             })(this)
+
+
+        this._updateDamageStatus = damageUpdateCallBack;
+        this._index = index;
 
     }
 }
