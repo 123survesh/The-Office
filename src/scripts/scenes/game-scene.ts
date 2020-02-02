@@ -22,7 +22,7 @@ export class GameScene extends Phaser.Scene {
   init(): void {
     let dimensions = window.constants.DATA.dimensions;
     // let width = 1080, height = 1920;
-    let width = window.screen.width, height = window.screen.height;
+    let width = this.cameras.main.width, height = this.cameras.main.height;
     
     this._containers["boss_bar"] = this.add.container(0, 0);
     this._containers["boss_bar"].setSize(dimensions["boss_bar"].width * width, dimensions["boss_bar"].height * height);

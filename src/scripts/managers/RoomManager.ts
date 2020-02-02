@@ -1,5 +1,5 @@
 import Room from '../objects/room';
-import {skillType} from '../../assets/data/game_data';
+import {skillType, wave} from '../../assets/data/game_data';
 export default class RoomManager {
 	public rooms: Phaser.GameObjects.Group;
 	private _scene: Phaser.Scene;
@@ -11,6 +11,8 @@ export default class RoomManager {
 	private _height: number = 0;
 	private _width: number = 0;
 	private _skills: Array<string>;
+
+	public waveIndex: number = 0;
 
 	private _timeElapsed: number = 0;
 	private _payForJob: Function;
@@ -78,5 +80,13 @@ export default class RoomManager {
 			let random1 = Math.floor(5 * Math.random()), random2 = Math.floor(3 * Math.random());
 			this.rooms.getFirstNth(random1, true).startDamage(this._skills[random2]);
 		}
+	}
+
+	public spawn(n, type) {
+		this.rooms.getFirstNth(n, true).startDamage(type);
+	}
+
+	public getRoom(n: number) {
+		return this.rooms.getFirstNth(n, true);
 	}
 }
